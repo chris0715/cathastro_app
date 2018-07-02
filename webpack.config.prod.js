@@ -2,15 +2,11 @@ const path = require('path')
 const webpack = require('webpack')
 const Html = require('html-webpack-plugin')
 module.exports = {
-  entry: [
-      'react-hot-loader/patch',
-      'webpack-dev-server/client?http://localhost:9000',
-      'webpack/hot/only-dev-server',
-    __dirname + '/src/index.js'],
+  entry:  __dirname + '/src/index.js',
   output: {
     filename: 'bundle.js',
-    path: __dirname + '/public',
-    publicPath: '/'
+    path: __dirname + '/build',
+    publicPath: './'
   },
   module: {
     rules: [
@@ -20,7 +16,7 @@ module.exports = {
         loader: 'babel-loader',
         options: {
           presets: ["env", "react"],
-          plugins: ["react-hot-loader/babel", 'transform-class-properties']
+          plugins: ['transform-class-properties']
         }
       },
       {
@@ -33,18 +29,25 @@ module.exports = {
     ]
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify('production')
+      }
+    }),
     new Html({
       inject: true,
       template: __dirname + '/public/index.html',
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeRedundantAttributes: true,
+        removeEmptyAttributes: true,
+        removeStyleLinkTypeAttributes: true,
+        keepClosingSlash: true,
+        minifyJS: true,
+        minifyCSS: true,
+        minifyURLs: true
+      }
     })
-  ],
-  devServer: {
-    contentBase: __dirname + '/public',
-    port: 9000,
-    historyApiFallback: true,
-    publicPath: '/',
-    inline: true,
-    hot: true
-  }
+  ]
 }
