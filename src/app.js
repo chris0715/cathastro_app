@@ -1,12 +1,12 @@
 import React from 'react'
 
-const App = () => {
+class App extends React.Component {
+
+  render() {
     return (
-    <div>
-      <input />
-      <h1>Hello My zz</h1>
-    </div>
+      <h2>Hello here</h2>
     )
+  }
 }
 
 export default App

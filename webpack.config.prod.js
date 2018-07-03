@@ -1,6 +1,7 @@
 const path = require('path')
 const webpack = require('webpack')
 const Html = require('html-webpack-plugin')
+const ManifestPlugin = require('webpack-manifest-plugin')
 module.exports = {
   entry:  __dirname + '/src/index.js',
   output: {
@@ -49,15 +50,8 @@ module.exports = {
         minifyURLs: true
       }
     }),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false,
-        reduce_vars: false
-      },
-      output: {
-        comments: false
-      }, 
-      sourceMap: true
+    new ManifestPlugin({
+      fileName: 'asset-manifest.json'
     })
   ]
 }
