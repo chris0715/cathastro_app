@@ -1,13 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import myName from './component/component1'
-import App from './app'
-import '../public/assets/app.css'
+import App from './component/app'
+import './component/app.css'
 
 ReactDOM.render(<App />, document.getElementById('root'))
 if (module.hot) {
-    module.hot.accept('./app', () => {
-      const nextApp = require('./app').default
+    module.hot.accept('./component/app', () => {
+      const nextApp = require('./component/app').default
       ReactDOM.render(<App />, document.getElementById('root'))
     })
   }
