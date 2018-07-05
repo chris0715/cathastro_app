@@ -8,7 +8,7 @@
     "start": "node_modules/.bin/webpack-dev-server",
     "build": "node_modules/.bin/webpack --config webpack.config.prod.js",
     "prebuild": "node scripts/copy_assets.js"
-  },
+    },
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -28,6 +28,7 @@
     "webpack-manifest-plugin": "^2.0.3"
   },
   "devDependencies": {
+    "firebase-tools": "^3.19.3",
     "react-hot-loader": "^4.3.3",
     "webpack-cli": "^3.0.8",
     "webpack-dev-server": "^3.1.4"
