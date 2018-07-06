@@ -7,7 +7,8 @@ class LoginContainer extends Component {
     }
     state = {
         email:  '',
-        password: ''
+        password: '',
+        error: ''
     }
     handleClick({target: {name, value}}) {
         this.setState({[name]: value})
@@ -15,6 +16,11 @@ class LoginContainer extends Component {
     }
     handleSubmit(e) {
         e.preventDefault()
+        if (this.state.email && this.state.password) {
+
+        } else {
+            this.setState({ error: 'Please fill in both fields' })
+        }
     }
     render() {
         return (
@@ -23,6 +29,7 @@ class LoginContainer extends Component {
                     <p>Sign in or sign up by entering your email and password. </p>
                     <input name='email' value={this.state.email} onChange={this.handleClick} placeholder='Your email' />
                     <input name='password' value={this.state.password} onChange={this.handleClick} placeholder='your password'/>
+                    {this.state.error}
                     <button onClick={(e)=> this.handleSubmit(e)} className='red light'>Login</button>
                 </form>
             </div>
