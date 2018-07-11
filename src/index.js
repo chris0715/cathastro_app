@@ -4,6 +4,10 @@ import App from './component/app'
 import './component/app.css'
 
 
+window.onload(() => {
+  window.addEventListener('popstate', () => console.log('test'))
+})
+
 
 ReactDOM.render(<App />, document.getElementById('root'))
 
