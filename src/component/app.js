@@ -1,30 +1,35 @@
 import React from 'react'
-import LoginConainer from './LoginContainer'
+import { Route, withRouter } from 'react-router-dom'
+import LoginContainer from './LoginContainer'
 import Header from './Header'
+import ChatContainer from './ChatContainer'
+import UserContainer from './UserContainer'
 
 class App extends React.Component {
   state = {
     user: null
   }
-
+  
   componentDidMount() {
-    window.addEventListener('onpopstate', () => console.log('test'))
-
     firebase.auth().onAuthStateChanged((user) => {
-      this.setState({ user })
+      if (user) {
+        this.setState({ user })
+      } else {
+        this.props.history.push('/login')
+      }
+      
     })
   }
-
+  
   render() {
     return (
-      <div id='container' className='inner-container'>
-        <Header>
-          klk
-        </Header>
-        <LoginConainer />
+      <div id='container'>
+        <Route exact path='/' component={ChatContainer} />
+        <Route path='/login' component={LoginContainer} />
+        <Route path='/user/:id' component={UserContainer} />
       </div>
     )
   }
 }
 
-export default App
+export default withRouter(App)
