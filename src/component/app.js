@@ -9,11 +9,22 @@ class App extends React.Component {
   constructor() {
     super()
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.onMessage = this.onMessage.bind(this)
   }
   state = {
-    user: null
+    user: null,
+    messages: []
   }
   
+  onMessage(snapshot) {
+    const messages = Object.keys(snapshot).map(key => {
+      const msg = snapshot[key]
+      msg.id = key
+      return msg
+    })
+    this.setState({ messages })
+  }
+
   handleSubmit(msg) {
     const data = {
       msg,
@@ -35,6 +46,7 @@ class App extends React.Component {
 
     firebase.database().ref('/messages')
     .on('value', snapshot => {
+      this.onMessage(snapshot.val())
       console.log(snapshot.val())
     })
   }
@@ -42,7 +54,7 @@ class App extends React.Component {
   render() {
     return (
       <div id='container'>
-        <Route exact path='/' render={() => <ChatContainer handleSubmit={this.handleSubmit} />}  />
+        <Route exact path='/' render={() => <ChatContainer messages={this.state.messages} user={this.state.user} handleSubmit={this.handleSubmit} />}  />
         <Route path='/login' component={LoginContainer} />
         <Route path='/user/:id' component={UserContainer} />
       </div>

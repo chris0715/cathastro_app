@@ -45,11 +45,11 @@ class LoginContainer extends Component {
 			<div id='LoginContainer' className='inner-container'>
 			<Header />
 			<form>
-			<p>Sign in or sign up by entering your email and password. </p>
-			<input type='email' name='email' value={this.state.email} onChange={this.handleClick} placeholder='Your email' />
-			<input type='password' name='password' value={this.state.password} onChange={this.handleClick} placeholder='your password'/>
-			{this.state.error}
-			<button onClick={(e)=> this.handleSubmit(e)} className='red light'>Login</button>
+				<p>Sign in or sign up by entering your email and password. </p>
+				<input type='email' name='email' value={this.state.email} onChange={this.handleClick} placeholder='Your email' />
+				<input type='password' name='password' value={this.state.password} onChange={this.handleClick} placeholder='your password'/>
+				 {this.state.error}
+				<button onClick={(e)=> this.handleSubmit(e)} className='red light'>Login</button>
 			</form>
 			</div>
 		)

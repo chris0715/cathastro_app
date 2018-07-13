@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import Header from './Header'
 
 class ChatContainer extends React.Component {
@@ -35,8 +36,16 @@ class ChatContainer extends React.Component {
       <Header>
         <button className='red' onClick={this.handleLogout}>Logout</button>
       </Header>
-      <h1>Hello from chatContainer</h1>
-      <div id='message-container'></div>
+      <div id='message-container' >
+        {this.props.messages.map(message => (
+          <div className={`message ' ${this.props.user.email == message.author && 'mine'}`} key={message.key}>
+          <p>{message.msg}</p>
+          <p className='author'>
+            <Link to={`/user/${message.user_id}`}>{message.author} </Link>
+          </p>
+          </div>
+        ))}
+      </div>
       <div id='chat-input'>
       
         <textarea value={ this.state.newMessage } onKeyDown={this.handleKeyDown} name='newMessage' onChange={this.handleChange} placeholder='add your message...' />
