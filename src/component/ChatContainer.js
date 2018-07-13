@@ -19,7 +19,7 @@ class ChatContainer extends React.Component {
     this.setState({ newMessage: value })
   }
   handleSubmit() {
-    console.log('hey')
+    this.props.handleSubmit(this.state.newMessage)
     this.setState({ newMessage: '' })
   }
 

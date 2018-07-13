@@ -6,10 +6,23 @@ import ChatContainer from './ChatContainer'
 import UserContainer from './UserContainer'
 
 class App extends React.Component {
+  constructor() {
+    super()
+    this.handleSubmit = this.handleSubmit.bind(this)
+  }
   state = {
     user: null
   }
   
+  handleSubmit(msg) {
+    const data = {
+      msg,
+      author: this.state.user.email,
+      user_id: this.state.user.uid,
+      timestamp: Date.now()
+    }
+    firebase.database().ref('messages/').push(data)
+  }
   componentDidMount() {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
@@ -19,12 +32,17 @@ class App extends React.Component {
       }
       
     })
+
+    firebase.database().ref('/messages')
+    .on('value', snapshot => {
+      console.log(snapshot.val())
+    })
   }
   
   render() {
     return (
       <div id='container'>
-        <Route exact path='/' component={ChatContainer} />
+        <Route exact path='/' render={() => <ChatContainer handleSubmit={this.handleSubmit} />}  />
         <Route path='/login' component={LoginContainer} />
         <Route path='/user/:id' component={UserContainer} />
       </div>

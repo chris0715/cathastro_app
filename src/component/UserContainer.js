@@ -13,8 +13,6 @@ class UserContainer extends React.Component {
           <button className='red'>BACK TO CHAT</button>
         </Link>
       </Header>
-      
-
         <h1> Hello from the UserContainer </h1>
       </div>
     )
