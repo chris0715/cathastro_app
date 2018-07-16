@@ -13,7 +13,8 @@ class App extends React.Component {
   }
   state = {
     user: null,
-    messages: []
+    messages: [],
+    messagesLoaded: false
   }
   
   onMessage(snapshot) {
@@ -47,16 +48,19 @@ class App extends React.Component {
     firebase.database().ref('/messages')
     .on('value', snapshot => {
       this.onMessage(snapshot.val())
-      console.log(snapshot.val())
+      if (!this.state.messagesLoaded) {
+        this.setState({messagesLoaded: true})
+      }
+      //console.log(snapshot.val())
     })
   }
   
   render() {
     return (
       <div id='container'>
-        <Route exact path='/' render={() => <ChatContainer messages={this.state.messages} user={this.state.user} handleSubmit={this.handleSubmit} />}  />
+        <Route exact path='/' render={() => <ChatContainer messagesLoaded={this.state.messagesLoaded}  messages={this.state.messages} user={this.state.user} handleSubmit={this.handleSubmit} />}  />
         <Route path='/login' component={LoginContainer} />
-        <Route path='/user/:id' component={UserContainer} />
+        <Route path='/user/:id' render={({history, match}) =>  <UserContainer messagesLoaded={this.state.messagesLoaded} user={this.state.user} messages={this.state.messages} userID={match.params.id} />} />
       </div>
     )
   }

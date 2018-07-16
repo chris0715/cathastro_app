@@ -13,7 +13,24 @@ class UserContainer extends React.Component {
           <button className='red'>BACK TO CHAT</button>
         </Link>
       </Header>
-        <h1> Hello from the UserContainer </h1>
+      {this.props.messagesLoaded ? (<div ref={element => this.messageContainer = element} id='message-container' >
+        {this.props.messages.map((message, i) => {
+          if (message.user_id == this.props.userID) {
+            return <div className={`message ' ${this.props.user.email == message.author && 'mine'}`} key={message.key}>
+            <p>{message.msg}</p>
+            {(!this.props.messages[i + 1] || this.props.messages[i + 1].author !== message.author) && 
+              <p className='author'>
+                <Link to={`/user/${message.user_id}`}>{message.author} </Link>
+              </p>
+            }
+            
+            </div>
+          }
+          
+        })}
+      </div>) : (<div id='loading-container'>
+        <img src='/assets/icon.png' alt='logo' id='loader' />
+      </div>) }
       </div>
     )
   }
