@@ -1,4 +1,5 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import { Link } from 'react-router-dom'
 import Header from './Header'
 
@@ -8,9 +9,25 @@ class ChatContainer extends React.Component {
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleKeyDown = this.handleKeyDown.bind(this)
+    this.scrollToBottom =  this.scrollToBottom.bind(this)
   }
   state = {
     newMessage: ''
+  }
+  componentDidMount() {
+    this.scrollToBottom()
+  }
+
+  componentDidUpdate(previousProps) {
+    if (previousProps.messages.lenght != this.props.messages.lenght) {
+      this.scrollToBottom()
+    }
+  }
+  scrollToBottom() {
+    const messageContainer = ReactDOM.findDOMNode(this.messageContainer)
+    if (messageContainer) {
+      messageContainer.scrollTop = messageContainer.scrollHeight
+    }
   }
   
   handleLogout() {
@@ -36,7 +53,7 @@ class ChatContainer extends React.Component {
       <Header>
         <button className='red' onClick={this.handleLogout}>Logout</button>
       </Header>
-      <div id='message-container' >
+      <div ref={element => this.messageContainer = element} id='message-container' >
         {this.props.messages.map(message => (
           <div className={`message ' ${this.props.user.email == message.author && 'mine'}`} key={message.key}>
           <p>{message.msg}</p>
