@@ -4,19 +4,44 @@ import LoginContainer from './LoginContainer'
 import Header from './Header'
 import ChatContainer from './ChatContainer'
 import UserContainer from './UserContainer'
+import NotificationResource from '../resources/NotificationResource'
 
 class App extends React.Component {
-  constructor() {
-    super()
-    this.handleSubmit = this.handleSubmit.bind(this)
-    this.onMessage = this.onMessage.bind(this)
-  }
+  
   state = {
     user: null,
     messages: [],
     messagesLoaded: false
   }
-  
+
+  constructor() {
+    super()
+    this.handleSubmit = this.handleSubmit.bind(this)
+    this.onMessage = this.onMessage.bind(this)
+    
+  }
+ // ---------- React lifecycle methods
+  componentDidMount() {
+    this.notifications = new NotificationResource(firebase.messaging(), firebase.database())
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.setState({ user })
+        this.notifications.changeUser(user)
+      } else {
+        this.props.history.push('/login')
+      }
+      
+    })
+
+    firebase.database().ref('/messages')
+    .on('value', snapshot => {
+      this.onMessage(snapshot.val())
+      if (!this.state.messagesLoaded) {
+        this.setState({messagesLoaded: true})
+      }
+    })
+  }
+  // ----------------------------------------------------------------------------------------------------
   onMessage(snapshot) {
     const messages = Object.keys(snapshot).map(key => {
       const msg = snapshot[key]
@@ -35,25 +60,8 @@ class App extends React.Component {
     }
     firebase.database().ref('messages/').push(data)
   }
-  componentDidMount() {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        this.setState({ user })
-      } else {
-        this.props.history.push('/login')
-      }
-      
-    })
-
-    firebase.database().ref('/messages')
-    .on('value', snapshot => {
-      this.onMessage(snapshot.val())
-      if (!this.state.messagesLoaded) {
-        this.setState({messagesLoaded: true})
-      }
-      //console.log(snapshot.val())
-    })
-  }
+  
+  // ------- Component Rendering ---------
   
   render() {
     return (
