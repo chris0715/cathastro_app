@@ -24,4 +24,21 @@ exports.sendNotifications = functions.database.ref('/messages/{messageId}')
       click_action: `https://${functions.config().firebase.authDomain}`
     }
   }
+
+  return admin.database().ref('fcmTokens').once('value').then(allTokens => {
+    if (allTokens.val()) {
+      const tokens = []
+      for (let fcmTokenKey in allTokens.val()) {
+        const fcmToken = allTokens.val()[fcmTokenKey]
+        if (fcmToken.user_id != snapshot.val().user_id) {
+          tokens.push(fcmToken.token)
+        }
+      }
+       if (tokens.length > 0) {
+         return admin.messaging().sendToDevice().then(response => {
+           const tokensToRemove = []
+         })
+       }
+    }
+  })
 })
