@@ -27,20 +27,37 @@ class App extends React.Component {
       if (user) {
         this.setState({ user })
         this.notifications.changeUser(user)
+
+        firebase.database().ref('/messages')
+        .on('value', snapshot => {
+          this.onMessage(snapshot.val())
+          if (!this.state.messagesLoaded) {
+            this.setState({messagesLoaded: true})
+          }
+        })
+
       } else {
         this.props.history.push('/login')
       }
       
     })
-
-    firebase.database().ref('/messages')
-    .on('value', snapshot => {
-      this.onMessage(snapshot.val())
-      if (!this.state.messagesLoaded) {
-        this.setState({messagesLoaded: true})
-      }
-    })
+    console.log('made it here ')
+    
+    
   }
+/*
+  getSnapshotBeforeUpdate(prevProps, prevState) {
+    if (!prevState.messages.length && !prevState.messagesLoaded) {
+      console.log('hey listen')
+      firebase.database().ref('/messages')
+      .once('value', snapshot => {
+      console.log('and also made it here ')
+      this.onMessage(snapshot.val())
+      
+    })
+    }
+    return null
+  } */
   // ----------------------------------------------------------------------------------------------------
   onMessage(snapshot) {
     const messages = Object.keys(snapshot).map(key => {
@@ -49,6 +66,9 @@ class App extends React.Component {
       return msg
     })
     this.setState({ messages })
+    if (!this.state.messagesLoaded) {
+      this.setState({messagesLoaded: true})
+    }
   }
 
   handleSubmit(msg) {

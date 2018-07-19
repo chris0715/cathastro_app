@@ -11,6 +11,7 @@ export default class NotificationResource {
       this.messaging
       .requestPermission()
       .then(res => {
+        console.log('Hey look', this.messaging.getToken())
         console.log('Permission Granted')
       })
       .catch(err => { 
